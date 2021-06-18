@@ -1,6 +1,7 @@
 module Departure
   # Holds the parameters of the DB connection and formats them to string
   class ConnectionDetails
+    DEFAULT_PORT = 3306
 
     # Constructor
     #
@@ -14,7 +15,7 @@ module Departure
     #
     # @return [String]
     def to_s
-      @to_s ||= "-h #{host} -u #{user} #{password_argument}"
+      @to_s ||= "-h #{host}:#{port} -u #{user} #{password_argument}"
     end
 
     # TODO: Doesn't the abstract adapter already handle this somehow?
@@ -57,6 +58,13 @@ module Departure
     # @return [String]
     def user
       ENV.fetch('PERCONA_DB_USER', connection_data[:username])
+    end
+
+    # Returns the database's port.
+    #
+    # @return [String]
+    def port
+      connection_data.fetch(:port, DEFAULT_PORT)
     end
 
     # Returns the database user's password. If PERCONA_DB_PASSWORD is passed its

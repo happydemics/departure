@@ -36,6 +36,16 @@ describe Departure::ConnectionDetails do
         it { is_expected.to include('-h foo.com:3306') }
       end
 
+      context 'when the port is specified' do
+        let(:env_var) { {} }
+        let(:connection_data) do
+          { host: 'foo.com', port: '3307', user: 'root', database: 'dummy_test' }
+        end
+
+        it { is_expected.not_to include('-h localhost:3306') }
+        it { is_expected.to include('-h foo.com:3307') }
+      end
+
       context 'when specifying PERCONA_DB_HOST' do
         let(:env_var) { { PERCONA_DB_HOST: 'foo.com:3306' } }
         it { is_expected.to include('h foo.com:3306') }
